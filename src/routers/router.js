@@ -1,12 +1,15 @@
 const express = require('express')
 const router = express.Router()
-const UserController=require("../controllers/userController")
-const bookController=require("../controllers/bookController")
+const Middle = require("../middlewares/commonMiddle")
+const UserController = require("../controllers/userController")
+const BookController = require("../controllers/bookController")
 
-router.post ("/register",UserController.createUser)
-router.post ("/login",UserController.loginUser)
 
-router.post ("/books",bookController.createBooks)
-router.get ("/books",bookController.getBook)
+//user
+router.post("/register", UserController.createUser)
+router.post("/login", UserController.loginUser)
+//book
+router.post("/books", Middle.authentication, BookController.createBooks)
+router.get("/books", Middle.authentication, BookController.getBook)
 
 module.exports = router

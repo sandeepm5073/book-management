@@ -24,7 +24,7 @@ const bookSchema = new mongoose.Schema({
             type:String,
             required:true
       },
-      subCategory:{
+      subcategory:{
             type:String,
             required:true
       },
@@ -32,13 +32,15 @@ const bookSchema = new mongoose.Schema({
             type:Number,
             default:0
       },
-      isDeletedAt:{
-            type:Date
-      },
       isDeleted:{
             type:Boolean,
             default:false
       },
+      isDeletedAt:{
+            type:Date,
+            default:null
+      },
+      
       releasedAt:{
             type:Date,
             required:true

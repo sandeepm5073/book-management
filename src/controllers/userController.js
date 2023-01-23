@@ -1,5 +1,5 @@
-const userModel = require("../models/userModel")
-// const jwt = require("jsonwebtoken")
+const UserModel = require("../models/userModel")
+const jwt = require("jsonwebtoken")
 const emailValidator = require("email-validator")
 const passwordValidator = require("password-validator")
 
@@ -30,7 +30,7 @@ const createUser = async function(req, res){
     if(!schema.validate(password)) return res.status(400).send({status: false, msg: "Password requirements didn't match"})
     if(!isValidMobile.test(phone)) return res.status(400).send({status: false, msg: "Phone Number is not Valid"})
 
-        let savedData = await userModel.create(userData)
+        let savedData = await UserModel.create(userData)
         res.status(201).send({status: true, message: "Success", data: savedData})
     }
     catch(err){
@@ -62,7 +62,7 @@ const loginUser=async function(req,res){
             iat:Date.now()
         };
 
-        let token=jwt.sign(payload,"Group16",{expiresIn:"30d",})
+        let token=jwt.sign(payload,"Group16",{expiresIn:"60s",})
         res.setHeader("x-auth-key",token);
         res.status(200).send({status:true,message:"Login successful",data:{token}})
         
