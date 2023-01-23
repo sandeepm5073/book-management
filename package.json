@@ -1,0 +1,24 @@
+{
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongoose": "^6.8.4"
+  },
+  "name": "project-booksmanagementgroup16",
+  "description": "## Project - Books Management",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sanhil143/project-booksManagementGroup16.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Sanhil143/project-booksManagementGroup16/issues"
+  },
+  "homepage": "https://github.com/Sanhil143/project-booksManagementGroup16#readme"
+}
