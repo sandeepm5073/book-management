@@ -1,4 +1,3 @@
-const { isValidObjectId } = require("mongoose");
 const BookModel = require("../models/bookModel")
 const UserModel = require("../models/userModel")
 const validator = require("../Validations/Validator");
@@ -175,20 +174,8 @@ const getBookById = async function(req,res){
     const updateBook = async (req, res) => {
     let body = req.body
     let bookId = req.params.bookId
-
-    //checking bookId and body
-
-    if (Object.keys(bookId).length == 0) {
-        return res.status(400).send({ status: false, message: "bookId is missing" })
-    }
-    if (Object.keys(body).length == 0) {
-        return res.status(400).send({ status: false, message: "data is required for updating book" })
-    }
-
-    //bookId validation
-    if (bookId && !validator.isValidObjectId(bookId)) {
-        return res.status(400).send({ status: false, message: "invalid bookId" })
-    }
+    if(!bookId) return res.status(400).send({status:false , msg:"Please Enter BookId"})
+    if(!isValidObjectId(bookId)) return res.status(400).send({status: false, msg: "Please enter valid object id"})
 
     //destructuring body
     const { title, excerpt, releasedAt, ISBN } = body
@@ -262,7 +249,7 @@ module.exports.createBooks = createBooks
 
 module.exports.getBook = getBook
 module.exports.updateBook = updateBook
-module.exports.getBookById = getBookById
+
 
 
 
