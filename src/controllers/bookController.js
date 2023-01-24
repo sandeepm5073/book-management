@@ -37,27 +37,27 @@ const createBooks=async function(req,res){
     }
 
 
-    if(!excerpt.match(validator.isValid)){
+    if(!excerpt.match(isValid)){
         return res.status(400).send({status:false,msg:"invalid excerpt"})
     }
 
-    if(!validator.isValidObjectId(userId)){
+    if(!isValidObjectId(userId)){
     return res.status(400).send({status :false , msg: "Enter Valid user Id" })
     }
 
-    if(!ISBN.match(validator.isValidISBN)){
+    if(!ISBN.match(isValidISBN)){
         return res.status(400).send({status:false,msg:"invalid ISBN"})
     }
 
-    if(!category.match(validator.isValid)){
+    if(!category.match(isValid)){
         return res.status(400).send({status:false,msg:"invalid category type"})
     }
     
-    if(!subcategory.match(validator.isValid)){
+    if(!subcategory.match(isValid)){
         return res.status(400).send({status:false,msg:"invalid subcategory type"})
     }
 
-    if(!releasedAt.match(validator.isValidReleasedAt)){
+    if(!releasedAt.match(isValidReleasedAt)){
         return res.status(400).send({status:false,msg:"invalid date"})
     }
 
@@ -72,7 +72,7 @@ const createBooks=async function(req,res){
     }
 
     if (req.decode.userId !== userId ) {
-        res.status(401).send({ status: false, msg: "Not Authorized" })
+        res.status(403).send({ status: false, msg: "Not Authorized" })
     }
 
     const newBook=await BookModel.create(data)
