@@ -2,6 +2,7 @@ const { isValidObjectId } = require("mongoose")
 const BookModel = require("../models/bookModel")
 const UserModel = require("../models/userModel") 
 const validator = require("../Validations/Validator");
+const reviewModel = require("../models/reviewModel")
 
 
 
@@ -113,10 +114,28 @@ const getBook = async (req, res) => {
 }
 }
 
+const getBookById = async function(req,res){
+try {
+    let bookId = req.params.bookId
+    if(!bookId) return res.status(400).send({status:false , msg:"Please Enter BookId"})
+    if(!isValidObjectId(bookId)) return res.status(400).send({status: false, msg: "Please enter valid object id"})
 
-module.exports.createBooks = createBooks
+    let book = await BookModel.findOne({_id:bookId ,isDeleted:false}).lean()
+    if (!book) return res.status(404).send({status:false,msg:"Book doesn't exists"})
 
-module.exports.getBook = getBook
+    let reviewData = await reviewModel.find({_id: bookId, isDeleted:false})
+    
+    book.review = reviewData;
+    return res.status(200).send({status: true, data: book})
+
+} catch (error) {
+     return res.status(500).send({status: false , msg : error.message})  
+   } 
+
+}
+
+
+module.exports = {createBooks, getBook, getBookById}
 
 
 
