@@ -1,7 +1,6 @@
 const UserModel = require("../models/userModel")
 const jwt = require("jsonwebtoken")
-const emailValidator = require("email-validator")
-const passwordValidator = require("password-validator")
+const validator = require("../Validations/Validator");
 
 const createUser = async function(req, res){
     try{
@@ -40,36 +39,47 @@ const createUser = async function(req, res){
 
 //---------------------------------------  Login User    -------------------------------------------------
 
-const loginUser=async function(req,res){
+const loginUser = async function (req, res) {
     try {
-        let{email,password}=req.body
+      let { email, password } = req.body;
+  
+      if (Object.keys(req.body).length === 0) {
+        return res.status(400).send({ status: false, msg: "please input user Details" });
+      }
 
-        if(Object.keys(req.body).length==0){
-            return res.status(400).send({status:false, message:"please input user details"})
-        }
-
-
-    //    let findUser=await UserModel.findOne({email})
-    //    if(!findUser)
-    //    return res.status(400).send({status:false,message:"no user with this email"})
-
-
-        let verifyUser=await UserModel.findOne({email:email, password:password})
-        if(!verifyUser)
-        return res.status(400).send({status:false, message:"invalid login credentails"})
-        let payload={
-            userId:verifyUser._id,
-            iat:Date.now()
-        };
-
-        let token=jwt.sign(payload,"Group16",{expiresIn:"60s",})
-        res.setHeader("x-auth-key",token);
-        res.status(200).send({status:true,message:"Login successful",data:{token}})
-        
+      if (!email) {
+        return res.status(400).send({ status: false, message: "EmailId is mandatory"});
+      }
+      if (!validator.isValidEmail(email)) {
+        return res.status(400).send({ status: false, message: "EmailId should be Valid"});
+      }
+      if (!password) {
+        return res.status(400).send({status: false, message: "Password is mandatory"});
+      }
+      if (password.length < 8 || password.length > 15) {
+        return res.status(400).send({ status: false, message: "the length of password must be min:- 8 or max: 15"});
+      }
+  
+    //   let findUser = await UserModel.findOne({ email });
+    //   if (!findUser)
+    //     return res
+    //       .status(404)
+    //       .send({ status: false, message: "no user with this email exists" });
+  
+      let verifyUser = await UserModel.findOne({email: email,password: password });
+      if (!verifyUser)
+        return res.status(400).send({ status: false, message: "Invalid Login Credential" });
+  
+      let payload = {userId: verifyUser._id, iat: Date.now(), };
+  
+      let token = jwt.sign(payload, "Group16", { expiresIn: "30min"});
+  
+      res.setHeader("x-auth-key", token);
+      res .status(200).send({ status: true, message: "login successful", data: { token } });
     } catch (error) {
-        res.status(500).send({status:false,message:error.message });
+       res.status(500).send({status: false, message: error.message});
     }
-}
+  };
 
 module.exports={loginUser,createUser}
 
