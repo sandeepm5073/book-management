@@ -27,7 +27,7 @@ const userSchema = new mongoose.Schema({
       address:{
             street:String,
             city:String,
-            pincode:String,
+            pincode:String,// sandeep
 
       },
 

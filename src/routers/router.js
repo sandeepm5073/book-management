@@ -1,25 +1,23 @@
 const express = require('express')
 const router = express.Router()
-const Middle = require("../middlewares/commonMiddle")
-const UserController = require("../controllers/userController")
-const BookController = require("../controllers/bookController")
-
+const {authentication} = require("../middlewares/commonMiddle")
+const {loginUser,createUser} = require("../controllers/userController")
+const {createBooks, getBook, updateBook, deleteBook,getBookById} = require("../controllers/bookController")
 
 //user
-router.post("/register", UserController.createUser)
-router.post("/login", UserController.loginUser)
+router.post("/register", createUser)
+router.post("/login", loginUser)
 
 //book
-router.post("/books", Middle.authentication, BookController.createBooks)
-router.get("/books", Middle.authentication, BookController.getBook)
-router.put("/books/:bookId", Middle.authentication, BookController.updateBook)
-router.get("/books/:bookId", Middle.authentication, BookController.getBookById)
-router.delete("/books/:bookId", Middle.authentication, BookController.deleteBook );
-
+router.post("/books", authentication, createBooks)
+router.get("/books", authentication, getBook)
+router.put("/books/:bookId", authentication, updateBook)
+router.get("/books/:bookId", authentication, getBookById)
+router.delete("/books/:bookId", authentication, deleteBook );
 
 
 router.all("/*", (req, res) => {
-      res.status(400).send({ status: false, message: "invalid url" })
+      res.status(400).send({ status: false, message: "This page does not exist, please check your url" })
 })
 
 module.exports = router

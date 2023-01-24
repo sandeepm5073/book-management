@@ -16,10 +16,18 @@ const isValidTitle = function (title) {
 //_________ Validations : Mobile No ________________
 
 const isValidMobileNo = function (phone) {
-  const regexMob = /^(?:(?:\+|0{0,2})91(\s*[\-]\s*)?|[0]?)?[6789]\d{9}$/g;
+  const regexMob = /^[6-9]\d{9}$/
   return regexMob.test(phone);
 };
 
+const isValidPassword = (password) => {
+  const regPass = /(?=^.{8,15}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/
+  return regPass.test(password)
+}
+const isValidPincode = (pincode) => {
+  const regPin = /^[1-9][0-9]{5}$/
+  return regPin.test(pincode)
+}
 //_________ Validations : Email  ________________
 
 const isValidEmail = function (email) {
@@ -58,4 +66,4 @@ const isValidReleasedAt = (releasedAt) => {
 //_________ Export : Modules  ________________
 
 module.exports = { isValid, isValidISBN, isValidTitle, isValidMobileNo,
-                    isValidEmail, isValidName, isValidObjectId, isValidReleasedAt };
+                    isValidEmail, isValidName, isValidObjectId, isValidReleasedAt,isValidPassword, isValidPincode };
