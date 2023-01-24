@@ -60,7 +60,7 @@ const loginUser = async function (req, res) {
     if (!email) {
       return res.status(400).send({ status: false, message: "EmailId is mandatory" });
     }
-    if (!validator.isValidEmail(email)) {
+    if (!isValidEmail(email)) {
       return res.status(400).send({ status: false, message: "EmailId should be Valid" });
     }
     if (!password) {
