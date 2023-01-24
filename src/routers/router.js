@@ -12,4 +12,8 @@ router.post("/login", UserController.loginUser)
 router.post("/books", Middle.authentication, BookController.createBooks)
 router.get("/books", Middle.authentication, BookController.getBook)
 
+router.all("/*", (req,res) => {
+      res.status(400).send({ status: false, message: "invalid url"})
+})
+
 module.exports = router

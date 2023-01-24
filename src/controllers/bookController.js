@@ -1,6 +1,6 @@
 const { isValidObjectId } = require("mongoose")
 const BookModel = require("../models/bookModel")
-const UserModel = require("../models/userModel")
+const UserModel = require("../models/userModel") 
 
 
 
@@ -56,8 +56,8 @@ const createBooks = async function (req, res) {
 
 const getBook = async (req, res) => {
     try {
+      
         let query = req.query
-
         if (Object.keys(query).length == 0) {
             let getBook = await BookModel.find({ query, isDeleted: false })
                 .select({ _id: 1, title: 1, excerpt: 1, userId: 1, category: 1, subcategory: 1, releasedAt: 1, reviews: 1 })
@@ -116,3 +116,9 @@ const getBook = async (req, res) => {
 module.exports.createBooks = createBooks
 
 module.exports.getBook = getBook
+
+
+
+
+
+
