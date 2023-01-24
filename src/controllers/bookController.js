@@ -151,6 +151,7 @@ const getBook = async (req, res) => {
     }
 }
 
+
 const getBookById = async function(req,res){
     try {
         let bookId = req.params.bookId
@@ -171,6 +172,7 @@ const getBookById = async function(req,res){
     
     }
     
+
     const updateBook = async (req, res) => {
     let body = req.body
     let bookId = req.params.bookId
@@ -243,12 +245,33 @@ const getBookById = async function(req,res){
     return res.status(200).send({ status: true, message: "Success", data: updateBook })
 }
 
+const deleteBook = async function (req, res) {
+    try {
+      let bookId = req.params.bookId;
+      if (!bookId) {
+        return res.status(400).send({ status: false, message: "please provide a bookId in params" });
+      }
+      if(!validator.isValidObjectId(bookId)){return res.status(400).send({ status: false, msg: "bookId is not matched" });}
+  
+      let checkBookId = await BookModel.findOne({ _id: bookId, isDeleted: false });
+      if (!checkBookId) {
+        return res.status(404).send({ status: false, message: "no book found" });
+      }
+      let deletedBook = await BookModel.findByIdAndUpdate( { _id: bookId },{ $set: { isDeleted: true } },
+        { new: true }
+      );
+      return res.status(200).send({ status: true, message: "book sucessfully deleted", deletedBook });
+    } catch (error) {
+      return res.status(500).send(error.message);
+    }
+  };
 
 
 module.exports.createBooks = createBooks
 
 module.exports.getBook = getBook
 module.exports.updateBook = updateBook
+module.exports.deleteBook = deleteBook
 
 
 
