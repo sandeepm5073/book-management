@@ -6,52 +6,90 @@ const reviewModel = require("../models/reviewModel")
 
 
 
+let regexForString=/^[\w ]+$/
 
-const createBooks = async function (req, res) {
-    try {
-        let data = req.body
-        const { title, excerpt, userId, ISBN, category, subcategory, releasedAt } = data 
-        if (data.length == 0) {
-            return res.status(400).send({ status: false, message: "please give some data to create a book" })
-        }
-        if (!title) {
-            return res.status(400).send({ status: false, message: "title is mandatory" })
-        }
-        if (!excerpt) {
-            return res.status(400).send({ status: false, message: "excerpt is mandatory" })
-        }
-        if (!userId) {
-            return res.status(400).send({ status: false, message: "userId is mandatory" })
-        }
-        if (!ISBN) {
-            return res.status(400).send({ status: false, message: "ISBN is mandatory" })
-        }
-        if (!category) {
-            return res.status(400).send({ status: false, message: "category is mandatory" })
-        }
-        if (!subcategory) {
-            return res.status(400).send({ status: false, message: "subcategory is mandatory" })
-        }
+let regexForIsbn=/^(?=(?:\D*\d){10}(?:(?:\D*\d){3})?$)[\d-]+$/
 
-        if (!releasedAt) {
-            return res.status(400).send({ status: false, message: "releasedAt is mandatory" })
-        }
+let regexForDate=/^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$/
 
-        let verifyTitle = await BookModel.findOne({ title: title })
-        if (verifyTitle) {
-            return res.status(400).send({ status: false, message: "title already exists" })
-        }
 
-        let verifyISBN = await BookModel.findOne({ ISBN: ISBN })
-        if (verifyISBN) {
-            return res.status(400).send({ status: false, message: " ISBN already exists" })
-        }
-        const newBook = await BookModel.create(data)
-        return res.status(201).send({ status: true, message: "book created successfully", data: newBook })
+
+
+const createBooks=async function(req,res){
+    try{
+    let data=req.body
+    const {title,excerpt,userId,ISBN ,category,subcategory,releasedAt}=data
+    if(data.length==0){
+        return res.status(400).send({status:false,msg:"please give some data to create a book"})
     }
-    catch (error) {
-        return res.status(500).send({ status: false, message: error.message })
+    if(!title){
+        return res.status(400).send({status:false,msg:"title is mandatory"})
     }
+    if(!excerpt){
+        return res.status(400).send({status:false,msg:"excerpt is mandatory"})
+    }
+    if(!userId){
+        return res.status(400).send({status:false,msg:"userId is mandatory"})
+    }
+    if(!ISBN){
+        return res.status(400).send({status:false,msg:"ISBN is mandatory"})
+    }
+    if(!category){
+        return res.status(400).send({status:false,msg:"category is mandatory"})
+    }
+    if(!subcategory){
+        return res.status(400).send({status:false,msg:"subcategory is mandatory"})
+    }
+
+    if(!releasedAt){
+        return res.status(400).send({status:false,msg:"releasedAt is mandatory"})
+    }
+
+
+    if(!excerpt.match(regexForString)){
+        return res.status(400).send({status:false,msg:"invalid excerpt"})
+    }
+
+    if(!isValidObjectId(userId)){
+    return res.status(400).send({status :false , msg: "Enter Valid user Id" })
+    }
+
+    if(!ISBN.match(regexForIsbn)){
+        return res.status(400).send({status:false,msg:"invalid ISBN"})
+    }
+
+    if(!category.match(regexForString)){
+        return res.status(400).send({status:false,msg:"invalid category type"})
+    }
+    
+    if(!subcategory.match(regexForString)){
+        return res.status(400).send({status:false,msg:"invalid subcategory type"})
+    }
+
+    if(!releasedAt.match(regexForDate)){
+        return res.status(400).send({status:false,msg:"invalid date"})
+    }
+
+     let verifyTitle=await BookModel.findOne({title:title})
+    if(verifyTitle){
+        return res.status(400).send({status:false,msg:"title already exists"})
+    }
+
+    let verifyISBN=await BookModel.findOne({ISBN:ISBN})
+    if(verifyISBN){
+        return res.status(400).send({status:false,msg:" ISBN already exists"})
+    }
+
+    if (req.decode.userId !== userId ) {
+        res.status(401).send({ status: false, msg: "Not Authorized" })
+    }
+
+    const newBook=await BookModel.create(data)
+    return res.status(201).send({status:true,msg:"book created successfully",data:newBook})
+}
+catch(error){
+return res.status(500).send({status:false,msg:error.message})
+}
 }
 
 
