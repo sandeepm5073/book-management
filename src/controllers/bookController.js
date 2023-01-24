@@ -152,8 +152,27 @@ const getBook = async (req, res) => {
     }
 }
 
-
-const updateBook = async (req, res) => {
+const getBookById = async function(req,res){
+    try {
+        let bookId = req.params.bookId
+        if(!bookId) return res.status(400).send({status:false , msg:"Please Enter BookId"})
+        if(!isValidObjectId(bookId)) return res.status(400).send({status: false, msg: "Please enter valid object id"})
+    
+        let book = await BookModel.findOne({_id:bookId ,isDeleted:false}).lean()
+        if (!book) return res.status(404).send({status:false,msg:"Book doesn't exists"})
+    
+        let reviewData = await reviewModel.find({_id: bookId, isDeleted:false})
+        
+        book.review = reviewData;
+        return res.status(200).send({status: true, data: book})
+    
+    } catch (error) {
+         return res.status(500).send({status: false , msg : error.message})  
+       } 
+    
+    }
+    
+    const updateBook = async (req, res) => {
     let body = req.body
     let bookId = req.params.bookId
 
@@ -243,7 +262,7 @@ module.exports.createBooks = createBooks
 
 module.exports.getBook = getBook
 module.exports.updateBook = updateBook
-
+module.exports.getBookById = getBookById
 
 
 
