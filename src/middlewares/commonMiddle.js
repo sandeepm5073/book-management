@@ -16,7 +16,8 @@ const authentication = async function (req, res, next) {
           .status(400)
           .send({ status: false, message: "Token is not correct!" });
       }
-      req.decode = decode;
+      req.loginUserId = decode.userId;
+      // console.log(decode.userId);
       next();
     });
   } catch (error) {

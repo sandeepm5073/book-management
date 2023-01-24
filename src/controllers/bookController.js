@@ -1,6 +1,6 @@
-const { isValidObjectId } = require("mongoose")
+const { isValidObjectId } = require("mongoose");
 const BookModel = require("../models/bookModel")
-const UserModel = require("../models/userModel") 
+const UserModel = require("../models/userModel")
 const validator = require("../Validations/Validator");
 const reviewModel = require("../models/reviewModel")
 
@@ -96,7 +96,7 @@ return res.status(500).send({status:false,msg:error.message})
 
 const getBook = async (req, res) => {
     try {
-      
+
         let query = req.query
         if (Object.keys(query).length == 0) {
             let getBook = await BookModel.find({ query, isDeleted: false })
@@ -147,33 +147,102 @@ const getBook = async (req, res) => {
         }
     }
 
- catch (error) {
-    return res.status(500).send({status:false, message:error.message})
-}
+    catch (error) {
+        return res.status(500).send({ status: false, message: error.message })
+    }
 }
 
-const getBookById = async function(req,res){
-try {
+
+const updateBook = async (req, res) => {
+    let body = req.body
     let bookId = req.params.bookId
-    if(!bookId) return res.status(400).send({status:false , msg:"Please Enter BookId"})
-    if(!isValidObjectId(bookId)) return res.status(400).send({status: false, msg: "Please enter valid object id"})
 
-    let book = await BookModel.findOne({_id:bookId ,isDeleted:false}).lean()
-    if (!book) return res.status(404).send({status:false,msg:"Book doesn't exists"})
+    //checking bookId and body
 
-    let reviewData = await reviewModel.find({_id: bookId, isDeleted:false})
-    
-    book.review = reviewData;
-    return res.status(200).send({status: true, data: book})
+    if (Object.keys(bookId).length == 0) {
+        return res.status(400).send({ status: false, message: "bookId is missing" })
+    }
+    if (Object.keys(body).length == 0) {
+        return res.status(400).send({ status: false, message: "data is required for updating book" })
+    }
 
-} catch (error) {
-     return res.status(500).send({status: false , msg : error.message})  
-   } 
+    //bookId validation
+    if (bookId && !validator.isValidObjectId(bookId)) {
+        return res.status(400).send({ status: false, message: "invalid bookId" })
+    }
 
+    //destructuring body
+    const { title, excerpt, releasedAt, ISBN } = body
+
+    //checking book presence
+    let checkBook = await BookModel.findOne({ _id: bookId })
+        .select({ userId: 1, _id: 0 })
+        // console.log(checkBook.userId.toString());
+
+    if (!checkBook) {
+        return res.status(404).send({ status: false, message: "book not found" })
+    }
+    if(checkBook.isDeleted == true){
+        return res.status(404).send({status:false, message:"book id already deleted"})
+    }
+    //authorisation
+    console.log(req.loginUserId);
+    console.log(checkBook.userId.toString());
+    if (req.loginUserId !== checkBook.userId.toString())
+    {
+        return res.status(403).send({ status: false, message: "unathorised user" })
+    }
+    //title validation
+
+    if (title && !validator.isValid(title)) {
+        return res.status(400).send({ status: false, message: "title should be in valid format" })
+    }
+    let checkTitle = await BookModel.findOne({ title: title, isDeleted: false })
+    if (checkTitle) {
+        return res.status(400).send({ status: false, message: "title is already is exist" })
+    }
+    //excerpt validation
+    if (excerpt && !validator.isValid(excerpt)) {
+        return res.status(400).send({ status: false, message: "excerpt should be in valid format" })
+    }
+    //releasedAt validation
+    if (releasedAt && !validator.isValidReleasedAt(releasedAt)) {
+        return res.status(400).send({ status: false, message: "enter valid release date in YYYY-MM-DD format..." })
+    }
+    // ISBN validation
+    if (ISBN && !validator.isValidISBN(ISBN)) {
+        return res.status(400).send({ status: false, message: "enter valid ISBN number" })
+    }
+    let checkIsbn = await BookModel.findOne({ ISBN: ISBN, isDeleted: false })
+    if (checkIsbn) {
+        return res.status(400).send({ status: false, message: "ISBN is already exist" })
+    }
+    //storing value on obj
+    let updatedKey = {}
+
+    if (title) {
+        updatedKey.title = title
+    }
+    if (excerpt) {
+        updatedKey.excerpt = excerpt
+    }
+    if (releasedAt) {
+        updatedKey.releasedAt = releasedAt
+    }
+    if (ISBN) {
+        updatedKey.ISBN = ISBN
+    }
+    let updateBook = await BookModel.findOneAndUpdate({ bookId, isDeleted: false },
+        { $set: updatedKey }, { new: true })
+    return res.status(200).send({ status: true, message: "Success", data: updateBook })
 }
 
 
-module.exports = {createBooks, getBook, getBookById}
+
+module.exports.createBooks = createBooks
+
+module.exports.getBook = getBook
+module.exports.updateBook = updateBook
 
 
 

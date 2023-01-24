@@ -49,7 +49,13 @@ const isValid = function (value) {
   return true;
 };
 
+//_________ Validations : ReleasedAt ________________
+
+const isValidReleasedAt = (releasedAt) => {
+  return /^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$/.test(releasedAt);
+};
+
 //_________ Export : Modules  ________________
 
 module.exports = { isValid, isValidISBN, isValidTitle, isValidMobileNo,
-                    isValidEmail, isValidName, isValidObjectId };
+                    isValidEmail, isValidName, isValidObjectId, isValidReleasedAt };
