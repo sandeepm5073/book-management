@@ -13,6 +13,8 @@ const createReview = async function (req, res) {
             if (!checkBookId) {
                   return res.status(404).send({ status: false, message: "Book Not Found" });
             }
+           
+            reviewData.reviewedAt = Date.now();
             reviewData.bookId = checkBookId._id
             let savedData = await reviewModel.create(reviewData)
 
@@ -29,6 +31,8 @@ const createReview = async function (req, res) {
             return res.status(500).send({status:false, message:error.message})
       }
 }
+
+
 
 const reviewUpdate = async function (req, res) {
       try {
@@ -70,7 +74,7 @@ const reviewUpdate = async function (req, res) {
           }
          
          if (rating < 1 || rating > 5) return res.status(400).send({ status: false, message: "rating should be inbetween 1 and 5" })
-        
+         
   
           let savedData = await reviewModel.findOneAndUpdate({ _id: reviewId },
               data, { updatedAt: new Date(), new: true })

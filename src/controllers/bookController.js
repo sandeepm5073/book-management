@@ -278,7 +278,7 @@ const deleteBook = async function (req, res) {
             return res.status(403).send({ status: false, message: "unathorised user" })
         }
 
-        let deletedBook = await BookModel.findByIdAndUpdate({ _id: bookId }, { $set: { isDeleted: true } },
+        let deletedBook = await BookModel.findByIdAndUpdate({ _id: bookId }, { $set: { isDeleted: true }, isDeletedAt:Date.now() },
             { new: true });
         return res.status(200).send({ status: true, message: "book sucessfully deleted", deletedBook });
     }
