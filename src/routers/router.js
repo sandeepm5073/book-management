@@ -3,6 +3,7 @@ const router = express.Router()
 const {authentication} = require("../middlewares/commonMiddle")
 const {loginUser,createUser} = require("../controllers/userController")
 const {createBooks, getBook, updateBook, deleteBook,getBookById} = require("../controllers/bookController")
+const reviewController = require("../controllers/reviewController")
 
 //user
 router.post("/register", createUser)
@@ -14,6 +15,9 @@ router.get("/books", authentication, getBook)
 router.put("/books/:bookId", authentication, updateBook)
 router.get("/books/:bookId", authentication, getBookById)
 router.delete("/books/:bookId", authentication, deleteBook );
+
+//review
+router.post("/books/:bookId/review", reviewController.createReview )
 
 
 router.all("/*", (req, res) => {
