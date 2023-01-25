@@ -77,17 +77,19 @@ const loginUser = async function (req, res) {
     let payload = { userId: verifyUser._id, iat: Date.now(), };
 
     let token = jwt.sign(payload, "Group16", { expiresIn: "30min" });
+    let decodedToken = jwt.verify(token, "Group16");
+    let UserID = decodedToken.userId;
+    let IAT = decodedToken.iat;
+    let ExpiresIn = decodedToken.exp
 
     res.setHeader("x-auth-key", token);
-    res.status(200).send({ status: true, message: "login successful", data: { token } });
+    res.status(200).send({ status: true, message: "login successful", data: token, UserID, IAT, ExpiresIn  });
   } catch (error) {
     res.status(500).send({ status: false, message: error.message });
   }
 };
 
 module.exports = { loginUser, createUser }
-
-
 
 
 

@@ -66,4 +66,4 @@ const isValidReleasedAt = (releasedAt) => {
 //_________ Export : Modules  ________________
 
 module.exports = { isValid, isValidISBN, isValidTitle, isValidMobileNo,
-                    isValidEmail, isValidName, isValidObjectId, isValidReleasedAt,isValidPassword, isValidPincode };
+isValidEmail, isValidName, isValidObjectId, isValidReleasedAt,isValidPassword, isValidPincode };
