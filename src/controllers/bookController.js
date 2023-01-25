@@ -168,10 +168,10 @@ const getBookById = async function (req, res) {
             return res.status(403).send({ status: false, message: "unathorised user" })
         }
 
-        let reviewData = await reviewModel.find({ _id: bookId, isDeleted: false })
+        let reviewData = await reviewModel.find({  bookId:book._id, isDeleted: false })
 
-        book.reviews = reviewData;
-        return res.status(200).send({ status: true, data: temp })
+        book["reviewData"] = reviewData;
+        return res.status(200).send({ status: true, data: book })
 
     } catch (error) {
         return res.status(500).send({ status: false, message: error.message })
