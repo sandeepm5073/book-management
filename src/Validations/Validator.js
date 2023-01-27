@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+const passwordValidator = require('password-validator')
+
 
 //_________ Validations : Name  ________________
 
@@ -21,7 +23,7 @@ const isValidMobileNo = function (phone) {
 };
 
 const isValidPassword = (password) => {
-  const regPass = /(?=^.{8,15}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/
+  const regPass = /^(?=.?[A-Z])(?=.?[a-z])(?=.?[0-9])(?=.?[#?!@$%^&*-]).{8,15}$/
   return regPass.test(password)
 }
 const isValidPincode = (pincode) => {
@@ -32,7 +34,7 @@ const isValidPincode = (pincode) => {
 
 const isValidEmail = function (email) {
   const regexEmail =
-  /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
   return regexEmail.test(email);
 };
 
@@ -54,6 +56,7 @@ const isValidObjectId = function (objectId) {
 const isValid = function (value) {
   if (typeof value === "undefined" || value === null) return false;
   if (typeof value == "string" && value.trim().length === 0) return false;
+  if (typeof value == "Number" && value.trim().length === 0) return false
   return true;
 };
 
@@ -63,7 +66,30 @@ const isValidReleasedAt = (releasedAt) => {
   return /^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$/.test(releasedAt);
 };
 
+const isValidBookValue = function (value) {
+  const regexTitle = /^[a-zA-Z][1-9]+$/;
+  return regexTitle.test(value);
+};
+
+
+//   let password = new passwordValidator();
+
+// // Add properties to it 
+//    password
+//       .is().min(8)                                    // Minimum length 8
+//       .is().max(15)                                  // Maximum length 100
+//       .has().uppercase()                              // Must have uppercase letters
+//       .has().lowercase()                              // Must have lowercase letters
+//       .has().digits(1)  
+
+
+
+
+
+
 //_________ Export : Modules  ________________
 
-module.exports = { isValid, isValidISBN, isValidTitle, isValidMobileNo,
-isValidEmail, isValidName, isValidObjectId, isValidReleasedAt,isValidPassword, isValidPincode };
+module.exports = {
+  isValid, isValidISBN, isValidTitle, isValidMobileNo, isValidBookValue,
+  isValidEmail, isValidName, isValidObjectId, isValidReleasedAt, isValidPassword, isValidPincode
+};
