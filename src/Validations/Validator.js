@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const passwordValidator = require('password-validator')
+// const passwordValidator = require('password-validator')
 
 
 //_________ Validations : Name  ________________
@@ -11,9 +11,13 @@ const isValidName = function (name) {
 
 //_________ Validations : Title  ________________
 
-const isValidTitle = function (title) {
-  const regexTitle = /^[a-zA-Z]+$/;
-  return regexTitle.test(title);
+const isValidString = function (value) {
+  const regexTitle = /^[a-zA-Z ]+$/;
+  return regexTitle.test(value);
+};
+const isValidString2 = function (value) {
+  const regexTitle = /^(([A-Za-z ]+[\-\']?)([A-Za-z1-9 ]+)?\s)+([A-Za-z ]+[\-\']?)*([A-Za-z1-9 ]+)?$/;
+  return regexTitle.test(value);
 };
 //_________ Validations : Mobile No ________________
 
@@ -23,7 +27,7 @@ const isValidMobileNo = function (phone) {
 };
 
 const isValidPassword = (password) => {
-  const regPass = /^(?=.?[A-Z])(?=.?[a-z])(?=.?[0-9])(?=.?[#?!@$%^&*-]).{8,15}$/
+  const regPass = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,15}$/
   return regPass.test(password)
 }
 const isValidPincode = (pincode) => {
@@ -38,10 +42,10 @@ const isValidEmail = function (email) {
   return regexEmail.test(email);
 };
 
-//_________ Validations : ISBN  ________________
+//_________ Validations : ISBN solved ________________
 
 const isValidISBN = function (ISBN) {
-  const isbnRegex = /^(?=(?:\D*\d){5,13}(?:(?:\D*\d){3})?$)[\d-]+$/g;
+  const isbnRegex = /^(?=(?:\D*\d){10}(?:(?:\D*\d){3})?$)[\d-]+$/
   return isbnRegex.test(ISBN);
 };
 
@@ -53,12 +57,14 @@ const isValidObjectId = function (objectId) {
 
 //_________ Validations : Values ________________
 
-const isValid = function (value) {
-  if (typeof value === "undefined" || value === null) return false;
-  if (typeof value == "string" && value.trim().length === 0) return false;
-  if (typeof value == "Number" && value.trim().length === 0) return false
-  return true;
-};
+  const isValid = (value) => {
+    if (typeof value ==="undefined" || typeof value === null) return false
+    if (typeof value === "string" && value.trim().length === 0) return false
+    if (typeof value === "number" && value.trim().length === 0) return false  
+    if (typeof value === "object") return false
+
+    return true
+}
 
 //_________ Validations : ReleasedAt ________________
 
@@ -66,30 +72,9 @@ const isValidReleasedAt = (releasedAt) => {
   return /^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$/.test(releasedAt);
 };
 
-const isValidBookValue = function (value) {
-  const regexTitle = /^[a-zA-Z][1-9]+$/;
-  return regexTitle.test(value);
-};
-
-
-//   let password = new passwordValidator();
-
-// // Add properties to it 
-//    password
-//       .is().min(8)                                    // Minimum length 8
-//       .is().max(15)                                  // Maximum length 100
-//       .has().uppercase()                              // Must have uppercase letters
-//       .has().lowercase()                              // Must have lowercase letters
-//       .has().digits(1)  
-
-
-
-
-
-
 //_________ Export : Modules  ________________
 
 module.exports = {
-  isValid, isValidISBN, isValidTitle, isValidMobileNo, isValidBookValue,
-  isValidEmail, isValidName, isValidObjectId, isValidReleasedAt, isValidPassword, isValidPincode
+  isValid, isValidISBN, isValidString, isValidMobileNo,
+  isValidEmail, isValidName, isValidObjectId, isValidReleasedAt, isValidPassword, isValidPincode,isValidString2
 };

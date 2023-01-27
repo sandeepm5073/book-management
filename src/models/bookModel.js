@@ -4,7 +4,7 @@ const objectId = mongoose.Schema.Types.ObjectId
 const bookSchema = new mongoose.Schema({
       title:{
             type:String,
-            required:true,
+            required:true,  // evil return 1920 \\ 1920446465
             unique:true
       },
       excerpt:{
@@ -36,7 +36,7 @@ const bookSchema = new mongoose.Schema({
             type:Boolean,
             default:false
       },
-      isDeletedAt:{
+      deletedAt:{
             type:Date,
             
       },

@@ -34,7 +34,7 @@ const createUser = async function (req, res) {
 
       let checkPhone = await UserModel.findOne({ phone: phone })
       if (checkPhone) {
-        return res.status(400).send({ status: false, message: "phone no. is already exist" })  // remarks status code
+        return res.status(400).send({ status: false, message: "phone no. is already exist" })  
       }
         
       if (!email) {
@@ -102,7 +102,7 @@ const loginUser = async function (req, res) {
     let IAT = decodedToken.iat;
     let ExpiresIn = decodedToken.exp
 
-    res.setHeader("x-auth-key", token);
+    res.setHeader("x-api-key", token);
     res.status(200).send({ status: true, message: "login successful", data: token, UserID, IAT, ExpiresIn });
   } catch (error) {
     res.status(500).send({ status: false, message: error.message });
