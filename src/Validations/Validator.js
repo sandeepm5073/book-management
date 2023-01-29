@@ -16,7 +16,7 @@ const isValidString = function (value) {
   return regexTitle.test(value);
 };
 const isValidString2 = function (value) {
-  const regexTitle = /^(([A-Za-z ]+[\-\']?)([A-Za-z1-9 ]+)?\s)+([A-Za-z ]+[\-\']?)*([A-Za-z1-9 ]+)?$/;
+  const regexTitle = /^[a-zA-Z ]+([0-9]+)?[!@#$%^&*_+=]?/;
   return regexTitle.test(value);
 };
 //_________ Validations : Mobile No ________________
@@ -50,7 +50,7 @@ const isValidISBN = function (ISBN) {
 };
 
 //_________ Validations :  ObjectId ________________
-
+ 
 const isValidObjectId = function (objectId) {
   return mongoose.Types.ObjectId.isValid(objectId);
 };
