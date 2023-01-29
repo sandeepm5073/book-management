@@ -23,14 +23,12 @@ const createReview = async function (req, res) {
                   return res.status(400).send({ status: false, message: "please provide a valid rating" });
             }
 
-            if (review) {
-                  if (!isValid(review)) {
-                        return res.status(400).send({ status: false, message: "review is a required field" });
-                  }
-                  if (!review){
-                        return res.status(400).send({ status: false, message: "review should not be empty" })
-                  }
+
+            if (!isValid(review)) {
+                  return res.status(400).send({ status: false, message: "Please enter review" });
             }
+
+
             if (reviewedBy) {
                   if (!isValidName(reviewedBy) || !isValid(reviewedBy)) {
                         return res.status(400).send({ status: false, message: "Please Provide Valid Name" });

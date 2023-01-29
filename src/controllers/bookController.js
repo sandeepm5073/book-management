@@ -26,6 +26,7 @@ const createBooks = async function (req, res) {
         if (verifyTitle) {
             return res.status(400).send({ status: false, message: "title already exists" })
         }
+        data.title = title.toLowerCase().toString()
          //excerpt
          if (!excerpt) {
             return res.status(400).send({ status: false, message: "excerpt is mandatory" })

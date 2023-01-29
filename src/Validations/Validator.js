@@ -69,9 +69,8 @@ const isValidObjectId = function (objectId) {
     if (typeof value ==="undefined" || typeof value === null) return false
     if (typeof value === "string" && value.trim().length === 0) return false
     if (typeof value === "number" && value.trim().length === 0) return false  
-    if (typeof value === "object") return false
-
-    return true
+     
+     return true
 }
 
 //_________ Validations : ReleasedAt ________________
