@@ -46,7 +46,6 @@ const createReview = async function (req, res) {
             reviewData.bookId = checkBookId._id
 
             let checkDetails = await reviewModel.findOne({reviewedBy:reviewedBy,review:review,rating:rating})
-
             if (checkDetails) {
                   return res.status(400).send({
                         status: false,
