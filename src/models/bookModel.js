@@ -5,11 +5,13 @@ const bookSchema = new mongoose.Schema({
       title:{
             type:String,
             required:true,  // evil return 1920 \\ 1920446465
-            unique:true
+            unique:true,
+            trim:true
       },
       excerpt:{
             type:String,
-            required:true
+            required:true,
+            trim:true
       },
       userId:{
             type:objectId,

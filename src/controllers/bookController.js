@@ -33,6 +33,13 @@ const createBooks = async function (req, res) {
         if (!isValidString2(excerpt)) {
             return res.status(400).send({ status: false, message: "Please enter valid excerpt" }) 
         }
+           //userId
+           if (!userId) {
+            return res.status(400).send({ status: false, message: "userId is mandatory" })
+        }
+        if (!isValidObjectId(userId)) {
+            return res.status(400).send({ status: false, message: "Enter Valid user Id" })
+        }
 
         //ISBN
         if (!ISBN) {
@@ -46,13 +53,7 @@ const createBooks = async function (req, res) {
             return res.status(400).send({ status: false, message: " ISBN already exists" })
         }
        
-        //userId
-        if (!userId) {
-            return res.status(400).send({ status: false, message: "userId is mandatory" })
-        }
-        if (!isValidObjectId(userId)) {
-            return res.status(400).send({ status: false, message: "Enter Valid user Id" })
-        }
+     
        //Category
         if (!category) {
             return res.status(400).send({ status: false, message: "category is mandatory" })
@@ -209,7 +210,10 @@ const updateBook = async (req, res) => {
         if (checkBook.isDeleted == true) {
             return res.status(404).send({ status: false, message: "book is already deleted" })
         }
-
+        if (req.loginUserId !== checkBook.userId.toString()) {
+            return res.status(403).send({ status: false, message: "unathorised user" })
+        }
+      
         if (title && !isValidString(title)) {
             return res.status(400).send({ status: false, message: "title should be in valid format" })
         }
@@ -263,9 +267,7 @@ const updateBook = async (req, res) => {
         if (ISBN) {
             updatedKey.ISBN = ISBN
         }
-        if (req.loginUserId !== checkBook.userId.toString()) {
-            return res.status(403).send({ status: false, message: "unathorised user" })
-        }
+      
 
         let updateBook = await BookModel.findOneAndUpdate({ _id: bookId, isDeleted: false },
             { $set: updatedKey }, { new: true })

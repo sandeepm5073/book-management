@@ -7,7 +7,7 @@ const createReview = async function (req, res) {
             let reviewData = req.body
             let bookId = req.params.bookId
             let { review, rating, reviewedBy } = reviewData
-            // if(bookId = "") return res.status(400).send({status:false, message: "BookId is not Present"})
+
             if (!isValidObjectId(bookId)) return res.status(400).send({ status: false, message: "BookId is not valid" })
 
             let checkBookId = await BookModel.findById({ _id: bookId, isDeleted: false })
@@ -26,6 +26,9 @@ const createReview = async function (req, res) {
             if (review) {
                   if (!isValid(review)) {
                         return res.status(400).send({ status: false, message: "review is a required field" });
+                  }
+                  if (!review){
+                        return res.status(400).send({ status: false, message: "review should not be empty" })
                   }
             }
             if (reviewedBy) {
