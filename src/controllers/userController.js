@@ -96,7 +96,7 @@ const loginUser = async function (req, res) {
 
     let payload = { userId: verifyUser._id, iat: Date.now(), };
 
-    let token = jwt.sign(payload, "Group16", { expiresIn: "30min" });
+    let token = jwt.sign(payload, "Group16", { expiresIn: "60s" });
     let decodedToken = jwt.verify(token, "Group16");
     let UserID = decodedToken.userId;
     let IAT = decodedToken.iat;

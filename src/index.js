@@ -9,13 +9,9 @@ mongoose.connect("mongodb+srv://sanhil143:raisahab12345@sanhildb.kk3knyj.mongodb
 .then(() => console.log("My mongoDB is connected"))
 .catch((err) => console.error(err))
 
-
 app.use("/", router)
-
 
 app.listen(3000, () => {
       console.log("Express app running on port " + 3000);
 })
 
-//create review = delete something
-// update review handle edge cases

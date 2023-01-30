@@ -12,6 +12,10 @@ const isValidName = function (name) {
 //_________ Validations : Title  ________________
 
 const isValidString = function (value) {
+    if (typeof value ==="undefined" || typeof value === null) return false
+    if (typeof value === "string" && value.trim().length === 0) return false
+    if (typeof value === "number" && value.trim().length === 0) return false  
+    if (typeof value === "object") return false
   const regexTitle = /^[a-zA-Z ]+$/;
   return regexTitle.test(value);
 };
@@ -20,7 +24,7 @@ const isValidString2 = function (value) {
   if (typeof value === "string" && value.trim().length === 0) return false
   if (typeof value === "number" && value.trim().length === 0) return false  
   if (typeof value === "object") return false
-  const regexTitle = /^[a-zA-Z ]+([ 0-9]+)?[!@#$%^&*_+=]?/;
+  const regexTitle = /^[a-zA-Z ]+([0-9]+)?[!@#$%^&*_+=]?/;
   return regexTitle.test(value);
 };
 //_________ Validations : Mobile No ________________
@@ -62,7 +66,10 @@ const isValidObjectId = function (objectId) {
 //_________ Validations : Values ________________
 
   const isValid = (value) => {
-   
+    if (typeof value ==="undefined" || typeof value === null) return false
+    if (typeof value === "string" && value.trim().length === 0) return false
+    if (typeof value === "number" && value.trim().length === 0) return false  
+    if (typeof value === "object") return false
 
     return true
 }

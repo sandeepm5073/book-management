@@ -7,7 +7,7 @@ const createReview = async function (req, res) {
             let reviewData = req.body
             let bookId = req.params.bookId
             let { review, rating, reviewedBy } = reviewData
-            // if(bookId = "") return res.status(400).send({status:false, message: "BookId is not Present"})
+
             if (!isValidObjectId(bookId)) return res.status(400).send({ status: false, message: "BookId is not valid" })
 
             let checkBookId = await BookModel.findById({ _id: bookId, isDeleted: false })
@@ -23,11 +23,12 @@ const createReview = async function (req, res) {
                   return res.status(400).send({ status: false, message: "please provide a valid rating" });
             }
 
-            if (review) {
-                  if (!isValid(review)) {
-                        return res.status(400).send({ status: false, message: "review is a required field" });
-                  }
+
+            if (!isValid(review)) {
+                  return res.status(400).send({ status: false, message: "Please enter review" });
             }
+
+
             if (reviewedBy) {
                   if (!isValidName(reviewedBy) || !isValid(reviewedBy)) {
                         return res.status(400).send({ status: false, message: "Please Provide Valid Name" });
@@ -41,10 +42,10 @@ const createReview = async function (req, res) {
             let reviewList = await reviewModel.findOne({ _id: savedData._id }).select({ deletedAt: 0, createdAt: 0, updatedAt: 0, __v: 0, isDeleted: 0 })
 
 
-            let updatedBooks = await BookModel.findOneAndUpdate({ _id: bookId }, { $inc: { reviews: +1 } }, { new: true }).select({ __v: 0 })
+            let updatedBooks = await BookModel.findOneAndUpdate({ _id: bookId }, { $inc: { reviews: +1 } }, { new: true }).select({ __v: 0 }).lean()
             if (!updatedBooks) return res.status(400).send({ status: false, message: "Book Not Found" })
 
-            let temp = updatedBooks._doc
+            let temp = updatedBooks
             temp.reviewData = reviewList
 
             return res.status(201).send({ status: true, data: temp })
@@ -59,11 +60,10 @@ const createReview = async function (req, res) {
 const reviewUpdate = async function (req, res) {
       try {
             let data = req.body;
-            const { review, rating, reviewedBy } = data
-            if (Object.entries(data).length == 0) {
+            const {  rating  } = data
+            if (Object.keys(data).length == 0) {
                   return res.status(400).send({ status: false, message: "please provide some data" })
             }
-
 
             let bookId = req.params.bookId;
 
