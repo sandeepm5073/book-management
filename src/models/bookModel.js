@@ -10,7 +10,8 @@ const bookSchema = new mongoose.Schema({
       },
       excerpt:{
             type:String,
-            required:true
+            required:true,
+            trim:true
       },
       userId:{
             type:objectId,

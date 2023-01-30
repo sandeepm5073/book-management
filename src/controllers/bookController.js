@@ -1,8 +1,7 @@
 
 const BookModel = require("../models/bookModel")
-const UserModel = require("../models/userModel")
 const reviewModel = require("../models/reviewModel")
-const { isValidName,isValidBookValue,isValidString2, isValidISBN, isValidObjectId, isValidReleasedAt, isValidString, isValid, } = require("../Validations/Validator");
+const { isValidString2, isValidISBN, isValidObjectId, isValidReleasedAt, isValidString } = require("../Validations/Validator");
 
 
 // create book
@@ -27,6 +26,13 @@ const createBooks = async function (req, res) {
         if (verifyTitle) {
             return res.status(400).send({ status: false, message: "title already exists" })
         }
+         //excerpt
+         if (!excerpt) {
+            return res.status(400).send({ status: false, message: "excerpt is mandatory" })
+        }
+        if (!isValidString2(excerpt)) {
+            return res.status(400).send({ status: false, message: "Please enter valid excerpt" }) 
+        }
 
         //ISBN
         if (!ISBN) {
@@ -39,13 +45,7 @@ const createBooks = async function (req, res) {
         if (verifyISBN) {
             return res.status(400).send({ status: false, message: " ISBN already exists" })
         }
-        //excerpt
-        if (!excerpt) {
-            return res.status(400).send({ status: false, message: "excerpt is mandatory" })
-        }
-        if (!isValidString(excerpt)) {
-            return res.status(400).send({ status: false, message: "Please enter valid excerpt" }) 
-        }
+       
         //userId
         if (!userId) {
             return res.status(400).send({ status: false, message: "userId is mandatory" })
@@ -112,14 +112,10 @@ const getBook = async (req, res) => {
                 });
 
             if (Object.keys(books).length == 0) {
-                return res
-                    .status(404)
-                    .send({ status: false, message: "No Books Found..." });
+                return res.status(404).send({ status: false, message: "No Books Found..." });
             }
             // let sortedBooks = books.sort((a, b) => (a.name > b.name ? 1 : -1))
-            return res
-                .status(200)
-                .send({ status: true, message: "Success", data: books });
+            return res.status(200).send({ status: true, message: "Success", data: books });
         }
 
         // Destructuring
@@ -316,3 +312,4 @@ module.exports = { createBooks, getBook, updateBook, deleteBook, getBookById }
 
 
 
+  

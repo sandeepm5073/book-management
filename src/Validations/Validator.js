@@ -16,7 +16,11 @@ const isValidString = function (value) {
   return regexTitle.test(value);
 };
 const isValidString2 = function (value) {
-  const regexTitle = /^(([A-Za-z ]+[\-\']?)([A-Za-z1-9 ]+)?\s)+([A-Za-z ]+[\-\']?)*([A-Za-z1-9 ]+)?$/;
+  if (typeof value ==="undefined" || typeof value === null) return false
+  if (typeof value === "string" && value.trim().length === 0) return false
+  if (typeof value === "number" && value.trim().length === 0) return false  
+  if (typeof value === "object") return false
+  const regexTitle = /^[a-zA-Z ]+([ 0-9]+)?[!@#$%^&*_+=]?/;
   return regexTitle.test(value);
 };
 //_________ Validations : Mobile No ________________
@@ -50,7 +54,7 @@ const isValidISBN = function (ISBN) {
 };
 
 //_________ Validations :  ObjectId ________________
-
+ 
 const isValidObjectId = function (objectId) {
   return mongoose.Types.ObjectId.isValid(objectId);
 };
@@ -58,10 +62,7 @@ const isValidObjectId = function (objectId) {
 //_________ Validations : Values ________________
 
   const isValid = (value) => {
-    if (typeof value ==="undefined" || typeof value === null) return false
-    if (typeof value === "string" && value.trim().length === 0) return false
-    if (typeof value === "number" && value.trim().length === 0) return false  
-    if (typeof value === "object") return false
+   
 
     return true
 }
